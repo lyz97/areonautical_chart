@@ -63,7 +63,7 @@ def plot_data(info):
         plt.close()
 
 
-def plot_runway(runway_scale, rotate, start, length, runway_path):
+def plot_runway(runway_scale, times, rotate, start, length, runway_path):
     """
 
     :param length: 虚线宽度
@@ -78,8 +78,8 @@ def plot_runway(runway_scale, rotate, start, length, runway_path):
     t.tracer(False)
     try:
         a, b = runway_scale.split('×')
-        a = float(a) / 2
-        b = float(b) / 2
+        a = float(a) / (1.1 ** times)
+        b = float(b) / (1.1 ** times)
     except AttributeError:
         return
     t.fillcolor('grey')
@@ -89,25 +89,27 @@ def plot_runway(runway_scale, rotate, start, length, runway_path):
     t.begin_fill()
     t.left(rotate)  # 箭头左转rotate度
     t.penup()  # 抬起画笔
-    t.goto(start)  # 去坐标（70,0）
+    t.goto(0, 0)  # 去坐标（70,0）
     t.pendown()  # 放下画笔
 
     # --------------------------------画矩形---------------------------
-    t.forward(a)  # 前进a像素
+    t.forward(a/2)  # 前进a像素
     t.left(90)  # 箭头左转90度
     t.forward(b)  # 前进b像素
     t.left(90)  # 箭头左转90度
     t.forward(a)  # 前进a像素
     t.left(90)  # 箭头左转90度
     t.forward(b)  # 前进b像素
+    t.left(90)
+    t.forward(a/2)
     t.end_fill()
 
     # --------------------------------画虚线-----------------------------
     def dotted_line(l):
-        for i in range(math.ceil(l / 10)):
-            t.forward(5)
+        for i in range(math.ceil(l / 6)):
+            t.forward(3)
             t.penup()
-            t.forward(5)
+            t.forward(3)
             t.pendown()
 
     # t.forward(length)
@@ -119,6 +121,11 @@ def plot_runway(runway_scale, rotate, start, length, runway_path):
     # t.forward(a)
     # t.left(90)
     # t.forward(b + 2 * length)
+    t.left(180)
+    t.penup()
+    t.forward(a/2)
+    t.left(90)
+    t.pendown()
 
     dotted_line(length)
     t.left(90)
@@ -129,13 +136,29 @@ def plot_runway(runway_scale, rotate, start, length, runway_path):
     dotted_line(a)
     t.left(90)
     dotted_line(b + 2 * length)
-
     t.hideturtle()
-
     ts = t.getscreen()
     ts.getcanvas().postscript(file=runway_path)
 
     # t.done()
+
+
+def evaluate_size(runway_length, alpha):
+    try:
+        runway_length = float(runway_length)
+    except AttributeError:
+        return
+
+    a = math.fabs(runway_length * math.sin(math.radians(alpha)))
+    b = math.fabs(runway_length * math.cos(math.radians(alpha)))
+
+    times = 1
+    while (a > 500) or (b > 500):
+        a = a/1.1
+        b = b/1.1
+        times += 1
+
+    return times
 
 
 if __name__ == '__main__':
@@ -167,9 +190,8 @@ if __name__ == '__main__':
         runway_scale = row['跑道尺寸']
         rotate = row['真方位1']
         start = (-170, -50)
-
-
-        plot_runway(runway_scale, rotate, start, 10, runway_path)
+        times = evaluate_size(row['跑道长度'], row['真方位1'])
+        plot_runway(runway_scale, times, rotate, start, 10, runway_path)
 
     # plot_data(pic)
 
