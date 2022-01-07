@@ -131,11 +131,21 @@ def plot_runway(runway_scale, times, rotate, length, runway_path):
     t.left(90)
     dotted_line(a)
     t.left(90)
-    dotted_line(b + 2 * length)
+
+    # 防止四舍五入后虚线不一样场
+    dotted_line(b)
+    dotted_line(length)
+    dotted_line(length)
+
     t.left(90)
     dotted_line(a)
     t.left(90)
-    dotted_line(b + 2 * length)
+
+    # 防止四舍五入后虚线不一样场
+    dotted_line(b)
+    dotted_line(length)
+    dotted_line(length)
+
     t.hideturtle()
     ts = t.getscreen()
     ts.getcanvas().postscript(file=runway_path)
