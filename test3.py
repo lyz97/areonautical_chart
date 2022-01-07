@@ -63,11 +63,11 @@ def plot_data(info):
         plt.close()
 
 
-def plot_runway(runway_scale, times, rotate, start, length, runway_path):
+def plot_runway(runway_scale, times, rotate, length, runway_path):
     """
 
+    :param runway_path: 保存路径
     :param length: 虚线宽度
-    :param start:机场的位置起点
     :param runway_scale: 跑道尺寸，如'450x20'
     :param rotate: 跑道旋转度数
 
@@ -144,6 +144,13 @@ def plot_runway(runway_scale, times, rotate, start, length, runway_path):
 
 
 def evaluate_size(runway_length, alpha):
+    """
+
+    :param runway_length: 跑道长度
+    :param alpha: 跑道角度
+    :return: 缩小几倍
+    """
+
     try:
         runway_length = float(runway_length)
     except AttributeError:
@@ -189,9 +196,9 @@ if __name__ == '__main__':
         runway_path = '../pythonProject/airport_data/{}/runway_pic.eps'.format(row['机场名'])
         runway_scale = row['跑道尺寸']
         rotate = row['真方位1']
-        start = (-170, -50)
+
         times = evaluate_size(row['跑道长度'], row['真方位1'])
-        plot_runway(runway_scale, times, rotate, start, 10, runway_path)
+        plot_runway(runway_scale, times, rotate, 10, runway_path)
 
     # plot_data(pic)
 
