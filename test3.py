@@ -42,6 +42,19 @@ def process_data(df):
 
 def plot_data(info):
     global index_print
+
+    # 对数据库中的列名进行分别打印
+    # ---------------------------表面类型和跑道尺寸-----------------------------
+    fig, ax = plt.subplots()
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    surface_scale = str(info['表面类型']) +'   ' + str(info['跑道尺寸'])
+    plt.title(surface_scale)
+
+    plt.savefig('../pythonProject/airport_data/{}/test{}.eps'.format(info['机场名'], '表面类型和跑道尺寸'), format='eps', dpi=1000)
+    plt.close()
+
     for index_ in index_print:
         rotation_rate = 0
 
@@ -132,7 +145,7 @@ def plot_runway(runway_scale, times, rotate, length, runway_path):
     dotted_line(a)
     t.left(90)
 
-    # 防止四舍五入后虚线不一样场
+    # 防止四舍五入后虚线不一样长
     dotted_line(b)
     dotted_line(length)
     dotted_line(length)
@@ -141,7 +154,7 @@ def plot_runway(runway_scale, times, rotate, length, runway_path):
     dotted_line(a)
     t.left(90)
 
-    # 防止四舍五入后虚线不一样场
+    # 防止四舍五入后虚线不一样长
     dotted_line(b)
     dotted_line(length)
     dotted_line(length)
