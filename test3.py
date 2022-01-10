@@ -6,7 +6,7 @@ import math
 import pandas as pd
 import os
 
-index_print = ['机场标高', '跑道尺寸', '跑道长度', '表面类型', '跑道号1', '四字码']
+index_print = ['机场标高', '跑道长度', '跑道号1', '四字码']
 
 
 def get_data(f):
@@ -49,10 +49,10 @@ def plot_data(info):
     fig.patch.set_alpha(0.)
     ax.axis('off')
 
-    surface_scale = str(info['表面类型']) +'   ' + str(info['跑道尺寸'])
+    surface_scale = str(info['表面类型']) + '   ' + str(info['跑道尺寸'])
     plt.title(surface_scale)
 
-    plt.savefig('../pythonProject/airport_data/{}/test{}.eps'.format(info['机场名'], '表面类型和跑道尺寸'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '表面类型和跑道尺寸'), format='eps', dpi=1000)
     plt.close()
 
     for index_ in index_print:
@@ -76,7 +76,7 @@ def plot_data(info):
         plt.close()
 
 
-def plot_runway(runway_scale, times, rotate, length, runway_path):
+def plot_runway(name, runway_scale, times, rotate, length, runway_path):
     """
 
     :param runway_path: 保存路径
@@ -94,6 +94,7 @@ def plot_runway(runway_scale, times, rotate, length, runway_path):
         a = float(a) / (1.1 ** times)
         b = float(b) / (1.1 ** times)
     except AttributeError:
+        print('{}信息缺失'.format(name))
         return
     t.fillcolor('grey')
     t.setup(1000, 600, 0, 0)
@@ -106,7 +107,7 @@ def plot_runway(runway_scale, times, rotate, length, runway_path):
     t.pendown()  # 放下画笔
 
     # --------------------------------画矩形---------------------------
-    t.forward(a/2)  # 前进a像素
+    t.forward(a / 2)  # 前进a像素
     t.left(90)  # 箭头左转90度
     t.forward(b)  # 前进b像素
     t.left(90)  # 箭头左转90度
@@ -114,7 +115,7 @@ def plot_runway(runway_scale, times, rotate, length, runway_path):
     t.left(90)  # 箭头左转90度
     t.forward(b)  # 前进b像素
     t.left(90)
-    t.forward(a/2)
+    t.forward(a / 2)
     t.end_fill()
 
     # --------------------------------画虚线-----------------------------
@@ -136,7 +137,7 @@ def plot_runway(runway_scale, times, rotate, length, runway_path):
     # t.forward(b + 2 * length)
     t.left(180)
     t.penup()
-    t.forward(a/2)
+    t.forward(a / 2)
     t.left(90)
     t.pendown()
 
@@ -184,8 +185,8 @@ def evaluate_size(runway_length, alpha):
 
     times = 1
     while (a > 500) or (b > 500):
-        a = a/1.1
-        b = b/1.1
+        a = a / 1.1
+        b = b / 1.1
         times += 1
 
     return times
@@ -221,7 +222,7 @@ if __name__ == '__main__':
         rotate = row['真方位1']
 
         times = evaluate_size(row['跑道长度'], row['真方位1'])
-        plot_runway(runway_scale, times, rotate, 10, runway_path)
+        plot_runway(row['机场名'], runway_scale, times, rotate, 10, runway_path)
 
     # plot_data(pic)
 
