@@ -6,7 +6,7 @@ import math
 import pandas as pd
 import os
 
-index_print = ['机场标高', '跑道长度', '跑道号1', '四字码']
+index_print = ['机场标高', '跑道号1', '四字码']
 
 
 def get_data(f):
@@ -52,7 +52,18 @@ def plot_data(info):
     surface_scale = str(info['表面类型']) + '   ' + str(info['跑道尺寸'])
     plt.title(str(surface_scale))
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '表面类型和跑道尺寸'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '表面类型和跑道尺寸'), format='eps',
+                dpi=1000)
+    plt.close()
+    # ---------------------------跑道长度-----------------------------
+    fig, ax = plt.subplots()
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    plt.title(str(info['跑道长度']))
+
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道长度'), format='eps', dpi=1000)
+
     plt.close()
 
     for index_ in index_print:
@@ -103,7 +114,7 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
     t.pensize(1)
     t.pencolor("black")
     t.begin_fill()
-    t.left(360-rotate+90)  # 箭头左转rotate度
+    t.left(360 - rotate + 90)  # 箭头左转rotate度
     t.penup()  # 抬起画笔
     t.goto(0, 0)  # 去坐标（70,0）
     t.pendown()  # 放下画笔
