@@ -50,7 +50,7 @@ def plot_data(info):
     ax.axis('off')
 
     surface_scale = str(info['表面类型']) + '   ' + str(info['跑道尺寸'])
-    plt.title(surface_scale)
+    plt.title(str(surface_scale))
 
     plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '表面类型和跑道尺寸'), format='eps', dpi=1000)
     plt.close()
@@ -88,7 +88,9 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
     """
     t.reset()
     t.hideturtle()
-    t.tracer(False)
+    t.tracer(False)  # 不显示画图过程
+
+    # 确认缩放倍数
     try:
         a, b = runway_scale.split('×')
         a = float(a) / (1.1 ** times)
@@ -96,12 +98,12 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
     except AttributeError:
         print('{}信息缺失'.format(name))
         return
-    t.fillcolor('grey')
+    t.fillcolor('black')
     t.setup(1000, 600, 0, 0)
     t.pensize(1)
     t.pencolor("black")
     t.begin_fill()
-    t.left(rotate)  # 箭头左转rotate度
+    t.left(360-rotate+90)  # 箭头左转rotate度
     t.penup()  # 抬起画笔
     t.goto(0, 0)  # 去坐标（70,0）
     t.pendown()  # 放下画笔
@@ -142,23 +144,28 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
     t.pendown()
 
     dotted_line(length)
-    t.left(90)
-    dotted_line(a)
-    t.left(90)
-
-    # 防止四舍五入后虚线不一样长
-    dotted_line(b)
-    dotted_line(length)
-    dotted_line(length)
 
     t.left(90)
     dotted_line(a)
     t.left(90)
 
     # 防止四舍五入后虚线不一样长
-    dotted_line(b)
     dotted_line(length)
+    t.penup()
+    t.forward(b)
+    t.pendown()
     dotted_line(length)
+
+    t.left(90)
+    dotted_line(a)
+    t.left(90)
+
+    # 防止四舍五入后虚线不一样长
+    dotted_line(length)
+    t.penup()
+    t.forward(b)
+    t.pendown()
+    # dotted_line(length)
 
     t.hideturtle()
     ts = t.getscreen()
@@ -222,7 +229,7 @@ if __name__ == '__main__':
         rotate = row['真方位1']
 
         times = evaluate_size(row['跑道长度'], row['真方位1'])
-        plot_runway(row['机场名'], runway_scale, times, rotate, 10, runway_path)
+        plot_runway(row['机场名'], runway_scale, times, rotate, 20, runway_path)
 
     # plot_data(pic)
 
