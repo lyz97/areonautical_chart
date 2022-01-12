@@ -6,7 +6,7 @@ import math
 import pandas as pd
 import os
 
-index_print = ['机场标高', '跑道号1', '四字码']
+index_print = ['四字码']
 
 
 def get_data(f):
@@ -79,6 +79,35 @@ def plot_data(info):
 
     plt.close()
 
+    # ---------------------------机场标高-----------------------------
+    fig, ax = plt.subplots()
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    try:
+        elev = 'ELEV  ' + str(int(info['机场标高']))
+        plt.title(elev)
+    except ValueError:
+        pass
+
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '机场标高'), format='eps', dpi=1000)
+
+    plt.close()
+
+    # ---------------------------跑道号1-----------------------------
+    fig, ax = plt.subplots()
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    try:
+        plt.title(str(int(info['跑道号1'])))
+    except ValueError:
+        pass
+
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道号1'), format='eps', dpi=1000)
+
+    plt.close()
+
     for index_ in index_print:
         rotation_rate = 0
 
@@ -94,7 +123,7 @@ def plot_data(info):
         # ax.text(1, 1, text, fontsize=12, color="black", style="italic", weight="bold",
         #         verticalalignment='center', horizontalalignment='right', rotation=rotation_rate)
 
-        plt.title(info['{}'.format(index_)])
+        plt.title(str(int(info['{}'.format(index_)])))
 
         plt.savefig('../pythonProject/airport_data/{}/test{}.eps'.format(info['机场名'], index_), format='eps', dpi=1000)
         plt.close()
@@ -113,6 +142,7 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
     t.reset()
     t.hideturtle()
     t.tracer(False)  # 不显示画图过程
+    t.bgcolor('white')
 
     # 确认缩放倍数
     try:
@@ -122,6 +152,7 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
     except AttributeError:
         print('{}信息缺失'.format(name))
         return
+
     t.fillcolor('black')
     t.setup(1000, 600, 0, 0)
     t.pensize(1)
@@ -235,6 +266,42 @@ def evaluate_size(runway_length, alpha):
     return times
 
 
+def plot_scale(ture_distance_per_pix, save_path):
+    ture_distance_per_centimetre = 43 * ture_distance_per_pix
+    number_of_grid = 4
+
+    t.reset()
+    t.hideturtle()
+    t.tracer(False)  # 不显示画图过程
+
+    t.left(90)
+    t.forward(5)
+    t.write('0')
+    t.left(180)
+    t.forward(5)
+    t.left(90)
+    num = 1
+    for i in range(number_of_grid):
+        t.forward(43)
+        t.left(90)
+        t.forward(5)
+        t.left(90)
+        t.penup()
+        t.forward(10)
+        t.write('{}m'.format(ture_distance_per_centimetre))
+        num += 1
+        t.left(180)
+        t.forward(10)
+        t.right(90)
+        t.pendown()
+        t.forward(5)
+        t.left(90)
+
+    t.hideturtle()
+    ts = t.getscreen()
+    ts.getcanvas().postscript(file=save_path)
+
+
 if __name__ == '__main__':
     filename = 'D:/ZY数据.csv'
     data = process_data(get_data(filename))
@@ -266,6 +333,8 @@ if __name__ == '__main__':
 
         times = evaluate_size(row['跑道长度'], row['真方位1'])
         plot_runway(row['机场名'], runway_scale, times, rotate, 20, runway_path)
+        scaling_bar_save_path = '../pythonProject/airport_data/{}/scaling.eps'.format(row['机场名'])
+        plot_scale(times, scaling_bar_save_path)
 
     # plot_data(pic)
 
