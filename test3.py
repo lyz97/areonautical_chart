@@ -44,15 +44,16 @@ def plot_data(info):
     global index_print
 
     # 对数据库中的列名进行分别打印
+
     # ---------------------------表面类型和跑道尺寸-----------------------------
     fig, ax = plt.subplots()
     fig.patch.set_alpha(0.)
     ax.axis('off')
 
-    surface_scale = str(info['表面类型']) + '   ' + str(info['跑道尺寸'])
+    surface_scale = str(info['跑道尺寸']) + '   ' + str(info['表面类型'])
     plt.title(str(surface_scale))
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '表面类型和跑道尺寸'), format='eps',
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道尺寸和表面类型'), format='eps',
                 dpi=1000)
     plt.close()
     # ---------------------------跑道长度-----------------------------
@@ -63,6 +64,18 @@ def plot_data(info):
     plt.title(str(info['跑道长度']))
 
     plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道长度'), format='eps', dpi=1000)
+
+    plt.close()
+
+    # ---------------------------升降带-----------------------------
+    fig, ax = plt.subplots()
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    strip = 'Strip  ' + str(info['升降带'])
+    plt.title(strip)
+
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '升降带'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -139,6 +152,13 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
             t.forward(3)
             t.pendown()
 
+    def center_line(l):
+        for i in range(math.ceil(l/14)):
+            t.forward(7)
+            t.penup()
+            t.forward(7)
+            t.pendown()
+
     # t.forward(length)
     # t.left(90)
     # t.forward(a)
@@ -173,10 +193,15 @@ def plot_runway(name, runway_scale, times, rotate, length, runway_path):
 
     # 防止四舍五入后虚线不一样长
     dotted_line(length)
+
+    # 跑道中线
     t.penup()
-    t.forward(b)
+    t.forward(b/2)
     t.pendown()
-    # dotted_line(length)
+    t.left(90)
+    t.pensize(2)
+    t.pencolor('white')
+    center_line(a)
 
     t.hideturtle()
     ts = t.getscreen()
