@@ -6,8 +6,6 @@ import math
 import pandas as pd
 import os
 
-index_print = ['四字码']
-
 
 def get_data(f):
     df = pd.read_csv(f)
@@ -41,9 +39,12 @@ def process_data(df):
 
 
 def plot_data(info):
-    global index_print
+    """
+    对数据库中的所有信息分别写进可编辑的.eps文件
 
-    # 对数据库中的列名进行分别打印
+    :param info: 一个机场的所有相关信息
+    :return:
+    """
 
     # ---------------------------表面类型和跑道尺寸-----------------------------
     fig, ax = plt.subplots()
@@ -108,25 +109,39 @@ def plot_data(info):
 
     plt.close()
 
-    for index_ in index_print:
-        rotation_rate = 0
+    # ---------------------------四字码-----------------------------
+    fig, ax = plt.subplots()
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
 
-        # image = Image.new(mode='RGBA', size=(400, 400))
-        # plt.imshow(image)
-        fig, ax = plt.subplots()
-        fig.patch.set_alpha(0.)
+    try:
+        plt.title(str(info['四字码']))
+    except ValueError:
+        pass
 
-        # ax.scatter([1, 1], [1, 1])
-        ax.axis('off')
-        # plt.rcParams['font.sans-serif'] = ['SimHei']
-        # plt.rcParams['axes.unicode_minus'] = False
-        # ax.text(1, 1, text, fontsize=12, color="black", style="italic", weight="bold",
-        #         verticalalignment='center', horizontalalignment='right', rotation=rotation_rate)
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '四字码'), format='eps', dpi=1000)
 
-        plt.title(str(int(info['{}'.format(index_)])))
+    plt.close()
 
-        plt.savefig('../pythonProject/airport_data/{}/test{}.eps'.format(info['机场名'], index_), format='eps', dpi=1000)
-        plt.close()
+    # for index_ in index_print:
+    #     rotation_rate = 0
+    #
+    #     # image = Image.new(mode='RGBA', size=(400, 400))
+    #     # plt.imshow(image)
+    #     fig, ax = plt.subplots()
+    #     fig.patch.set_alpha(0.)
+    #
+    #     # ax.scatter([1, 1], [1, 1])
+    #     ax.axis('off')
+    #     # plt.rcParams['font.sans-serif'] = ['SimHei']
+    #     # plt.rcParams['axes.unicode_minus'] = False
+    #     # ax.text(1, 1, text, fontsize=12, color="black", style="italic", weight="bold",
+    #     #         verticalalignment='center', horizontalalignment='right', rotation=rotation_rate)
+    #
+    #     plt.title(str(int(info['{}'.format(index_)])))
+    #
+    #     plt.savefig('../pythonProject/airport_data/{}/test{}.eps'.format(info['机场名'], index_), format='eps', dpi=1000)
+    #     plt.close()
 
 
 def plot_runway(name, runway_scale, times, rotate, length, runway_path):
@@ -267,7 +282,7 @@ def evaluate_size(runway_length, alpha):
 
 
 def plot_scale(ture_distance_per_pix, save_path):
-    ture_distance_per_centimetre = 43 * ture_distance_per_pix
+    ture_distance_per_centimetre = int(43 * (1.1 ** ture_distance_per_pix))
     number_of_grid = 4
 
     t.reset()
@@ -288,7 +303,7 @@ def plot_scale(ture_distance_per_pix, save_path):
         t.left(90)
         t.penup()
         t.forward(10)
-        t.write('{}m'.format(ture_distance_per_centimetre))
+        t.write('{}m'.format(ture_distance_per_centimetre * num))
         num += 1
         t.left(180)
         t.forward(10)
