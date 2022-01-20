@@ -302,6 +302,11 @@ def evaluate_size(runway_length, alpha):
         b = b / 1.1
         times += 1
 
+    while (a < 300) and (b < 300):
+        a = a * 1.1
+        b = b * 1.1
+        times -= 1
+
     return times
 
 
@@ -315,7 +320,7 @@ def plot_scale(ture_distance_per_pix, save_path):
 
     t.left(90)
     t.forward(5)
-    t.write('0')
+    t.write('0', font=('宋体', 12, 'normal'))
     t.left(180)
     t.forward(5)
     t.left(90)
@@ -327,7 +332,7 @@ def plot_scale(ture_distance_per_pix, save_path):
         t.left(90)
         t.penup()
         t.forward(10)
-        t.write('{}m'.format(ture_distance_per_centimetre * num))
+        t.write('{}m'.format(ture_distance_per_centimetre * num), font=('宋体', 12, 'normal'))
         num += 1
         t.left(180)
         t.forward(10)
