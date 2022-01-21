@@ -148,6 +148,17 @@ def plot_data(info):
 
     plt.close()
 
+    t.reset()
+    t.hideturtle()
+    t.tracer(False)  # 不显示画图过程
+
+    t.write('标高和跑道长宽为米，方位为磁方位')
+
+    t.hideturtle()
+    ts = t.getscreen()
+    save_path = '../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '说明')
+    ts.getcanvas().postscript(file=save_path)
+
     # for index_ in index_print:
     #     rotation_rate = 0
     #
@@ -172,6 +183,8 @@ def plot_data(info):
 def plot_runway(name, runway_scale, times, rotate, strip_scale, runway_path):
     """
 
+    :param name: 机场名称
+    :param times: 缩放倍数：1.1**times
     :param runway_path: 保存路径
     :param strip_scale: 升降带尺寸
     :param runway_scale: 跑道尺寸，如'450x20'
