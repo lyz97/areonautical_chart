@@ -6,6 +6,7 @@ import math
 import pandas as pd
 import os
 import time
+import plot_PCN
 
 
 def get_data(f):
@@ -46,7 +47,12 @@ def plot_data(info):
     :param info: 一个机场的所有相关信息
     :return:
     """
-    rotation_rate = 360 - info['真方位1'] + 90
+
+    if info['真方位1'] < 180:
+        rotation_rate = 360 - info['真方位1'] + 90
+    elif info['真方位1'] > 180:
+        rotation_rate = 360 - info['真方位1'] + 90 + 180
+
     # 打印的标题距离图片的上方的距离
     top_dis = 0.15
 
@@ -114,7 +120,7 @@ def plot_data(info):
 
     plt.close()
 
-    # ---------------------------跑道号1-----------------------------
+    # ---------------------------跑道号-----------------------------
     fig, ax = plt.subplots()
     fig.patch.set_alpha(0.)
     ax.axis('off')
@@ -123,11 +129,27 @@ def plot_data(info):
         # 防止出现显示不全的情况
         plt.gcf().subplots_adjust(top=top_dis)
 
-        plt.title(str(int(info['跑道号1'])), rotation=rotation_rate)
+        plt.title(str(int(info['跑道号1'])), rotation=rotation_rate + 90)
     except ValueError:
         pass
 
     plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道号1'), format='eps', dpi=1000)
+
+    plt.close()
+
+    fig, ax = plt.subplots()
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    try:
+        # 防止出现显示不全的情况
+        plt.gcf().subplots_adjust(top=top_dis)
+
+        plt.title(str(int(info['跑道号2'])), rotation=rotation_rate + 90 + 180)
+    except ValueError:
+        pass
+
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道号2'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -148,16 +170,27 @@ def plot_data(info):
 
     plt.close()
 
-    t.reset()
-    t.hideturtle()
-    t.tracer(False)  # 不显示画图过程
 
-    t.write('标高和跑道长宽为米，方位为磁方位')
+    # ---------------------------说明-----------------------------
+    # fig, ax = plt.subplots(figsize=(10, 10))
+    # fig.patch.set_alpha(0.)
+    # ax.axis('off')
+    # # 中文
+    #
+    # plt.rcParams['font.sans-serif'] = ['SimHei']
+    # plt.rcParams['axes.unicode_minus'] = False
+    #
+    # plt.title('标高和跑道长度为米，方位为磁方位\n RWY: PCN 45/R/B/W/T', fontdict={'fontsize': 35})
+    #
+    # plt.savefig('../pythonProject/airport_data/pic.png', format='png')
+    # plt.close()
 
-    t.hideturtle()
-    ts = t.getscreen()
-    save_path = '../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '说明')
-    ts.getcanvas().postscript(file=save_path)
+    # t.write('标高和跑道长宽为米，方位为磁方位', move=False, align="left", font=("Arial", 8, "normal"))
+    #
+    # t.hideturtle()
+    # ts = t.getscreen()
+    # save_path = '../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '说明')
+    # ts.getcanvas().postscript(file=save_path)
 
     # for index_ in index_print:
     #     rotation_rate = 0
@@ -178,6 +211,62 @@ def plot_data(info):
     #
     #     plt.savefig('../pythonProject/airport_data/{}/test{}.eps'.format(info['机场名'], index_), format='eps', dpi=1000)
     #     plt.close()
+
+    # ------------------------------------磁偏角-------------------------------
+    try:
+        pi = int(info['磁偏角'])
+        t.reset()
+        t.hideturtle()
+        t.tracer(False)  # 不显示画图过程
+
+        t.left(90)
+        t.forward(90)
+        t.begin_fill()
+        t.left(165)
+        t.forward(20)
+        t.left(270 - 165)
+        t.forward(11)
+        t.left(270 - 165)
+        t.forward(20)
+        t.end_fill()
+
+        t.penup()
+        t.goto(0, 0)
+        t.pendown()
+        t.left(pi)
+        t.forward(90)
+        t.begin_fill()
+        t.left(165)
+        t.forward(20)
+        t.left(270 - 165)
+        t.forward(11)
+        t.left(270 - 165)
+        t.forward(20)
+        t.end_fill()
+
+        t.hideturtle()
+        ts = t.getscreen()
+        save_path = '../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '磁偏角')
+        ts.getcanvas().postscript(file=save_path)
+
+        fig, ax = plt.subplots()
+        fig.patch.set_alpha(0.)
+        ax.axis('off')
+
+        try:
+            # 防止出现显示不全的情况
+            plt.gcf().subplots_adjust(top=top_dis)
+
+            plt.title('VAR ' + str(int(info['磁偏角'])) + '° W', rotation=pi+90)
+        except ValueError:
+            pass
+
+        plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '磁偏角数据'), format='eps', dpi=1000)
+
+        plt.close()
+
+    except ValueError:
+        pass
 
 
 def plot_runway(name, runway_scale, times, rotate, strip_scale, runway_path):
@@ -232,15 +321,15 @@ def plot_runway(name, runway_scale, times, rotate, strip_scale, runway_path):
     t.pendown()  # 放下画笔
 
     # --------------------------------画矩形---------------------------
-    dotted_line(a / 2)  # 前进a像素
+    complete_dot(a / 2)  # 前进a像素
     t.left(90)  # 箭头左转90度
-    dotted_line(b)  # 前进b像素
+    complete_dot(b)  # 前进b像素
     t.left(90)  # 箭头左转90度
-    dotted_line(a)  # 前进a像素
+    complete_dot(a)  # 前进a像素
     t.left(90)  # 箭头左转90度
-    dotted_line(b)  # 前进b像素
+    complete_dot(b)  # 前进b像素
     t.left(90)
-    dotted_line(a / 2)
+    complete_dot(a / 2)
     t.end_fill()
 
     # -----------------------------升降带-----------------------------
@@ -345,7 +434,7 @@ def plot_scale(ture_distance_per_pix, save_path):
         t.left(90)
         t.penup()
         t.forward(10)
-        t.write('{}m'.format(ture_distance_per_centimetre * num), font=('宋体', 12, 'normal'))
+        t.write('{}m'.format(ture_distance_per_centimetre * num), font=('NEW TIMES ROME', 12, 'normal'))
         num += 1
         t.left(180)
         t.forward(10)
@@ -362,7 +451,7 @@ def plot_scale(ture_distance_per_pix, save_path):
 if __name__ == '__main__':
     filename = 'D:/ZY数据1.csv'
     data = process_data(get_data(filename))
-    pic = '../pythonProject/[3.1]阿荣通用机场.jpg'
+    # pic = '../pythonProject/[3.1]阿荣通用机场.jpg'
     if os.path.isdir('../pythonProject/airport_data'):
         pass
     else:
@@ -375,23 +464,27 @@ if __name__ == '__main__':
 
     # for index, row in data.iterrows():
     #     print(index)
-    plt.rc('font', family='Times New Roman')
     for row_index, row in data.iterrows():
         if os.path.isdir('../pythonProject/airport_data/{}'.format(row['机场名'])):
             pass
         else:
             os.mkdir('../pythonProject/airport_data/{}'.format(row['机场名']))
+
+        plot_PCN.plot_PCN(row['机场名'], row['机坪PCN值'])
+
+    plt.rc('font', family='Times New Roman')
+    for row_index, row in data.iterrows():
         plot_data(row)
         # for key, item in row.items():
         #     print(key)
-        runway_path = '../pythonProject/airport_data/{}/runway_pic.eps'.format(row['机场名'])
+        runway_path = '../pythonProject/airport_data/{}/跑道.eps'.format(row['机场名'])
         runway_scale = row['跑道尺寸']
         rotate = row['真方位1']
 
         times = evaluate_size(row['跑道长度'], row['真方位1'])
         strip_scale = row['升降带']
         plot_runway(row['机场名'], runway_scale, times, rotate, strip_scale, runway_path)
-        scaling_bar_save_path = '../pythonProject/airport_data/{}/scaling.eps'.format(row['机场名'])
+        scaling_bar_save_path = '../pythonProject/airport_data/{}/比例尺.eps'.format(row['机场名'])
         plot_scale(times, scaling_bar_save_path)
 
     # plot_data(pic)
