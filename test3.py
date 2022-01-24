@@ -120,6 +120,39 @@ def plot_data(info):
 
     plt.close()
 
+    # ---------------------------机场标高-----------------------------
+    fig, ax = plt.subplots(figsize=(5, 5))
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    try:
+        # 防止出现显示不全的情况
+        plt.gcf().subplots_adjust(top=top_dis)
+
+        plt.title(str(info['真方位1']) + '°', rotation=rotation_rate)
+    except ValueError:
+        pass
+
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '真方位1'), format='eps', dpi=1000)
+
+    plt.close()
+
+    fig, ax = plt.subplots(figsize=(5, 5))
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+
+    try:
+        # 防止出现显示不全的情况
+        plt.gcf().subplots_adjust(top=top_dis)
+
+        plt.title(str(info['真方位2']) + '°', rotation=rotation_rate)
+    except ValueError:
+        pass
+
+    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '真方位2'), format='eps', dpi=1000)
+
+    plt.close()
+
     # ---------------------------跑道号-----------------------------
     fig, ax = plt.subplots()
     fig.patch.set_alpha(0.)
@@ -129,7 +162,7 @@ def plot_data(info):
         # 防止出现显示不全的情况
         plt.gcf().subplots_adjust(top=top_dis)
 
-        plt.title(str(int(info['跑道号1'])), rotation=rotation_rate + 90)
+        plt.title(str(int(info['跑道号1'])), rotation=rotation_rate + 90 + 180)
     except ValueError:
         pass
 
@@ -145,7 +178,7 @@ def plot_data(info):
         # 防止出现显示不全的情况
         plt.gcf().subplots_adjust(top=top_dis)
 
-        plt.title(str(int(info['跑道号2'])), rotation=rotation_rate + 90 + 180)
+        plt.title(str(int(info['跑道号2'])), rotation=rotation_rate + 90)
     except ValueError:
         pass
 
@@ -231,10 +264,11 @@ def plot_data(info):
         t.end_fill()
 
         t.penup()
+        t.setheading(90)
         t.goto(0, 0)
         t.pendown()
         t.left(pi)
-        t.forward(90)
+        t.forward(70)
         t.begin_fill()
         t.left(165)
         t.forward(20)
@@ -257,7 +291,7 @@ def plot_data(info):
             # 防止出现显示不全的情况
             plt.gcf().subplots_adjust(top=top_dis)
 
-            plt.title('VAR ' + str(int(info['磁偏角'])) + '° W', rotation=pi+90)
+            plt.title('VAR ' + str(int(info['磁偏角'])) + '° W', rotation=pi-90)
         except ValueError:
             pass
 
