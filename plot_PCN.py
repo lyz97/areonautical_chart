@@ -8,12 +8,29 @@ def plot_PCN(airport_name, infomation):
     ax.axis('off')
     # 中文
 
+    plt.rcParams['font.sans-serif'] = ['SimHei', 'Times New Roman']
+    plt.rcParams['axes.unicode_minus'] = False
+
+    plt.text(0, 0, '标高和跑道长度为米，方位为磁方位\nRWY: PCN {}'.format(infomation),
+             fontdict={'fontsize': 35}, linespacing=1.7)
+
+    path = '../pythonProject/airport_data/{}/机坪PCN值.png'.format(airport_name)
+    plt.savefig(path, format='png')
+    plt.close()
+
+    #  ------------------------------------停机位坐标及编号-----------------------------------
+    fig, ax = plt.subplots(figsize=(10, 20))
+    fig.patch.set_alpha(0.)
+    ax.axis('off')
+    # 中文
+
     plt.rcParams['font.sans-serif'] = ['SimHei']
     plt.rcParams['axes.unicode_minus'] = False
 
-    plt.title('标高和跑道长度为米，方位为磁方位\nRWY: PCN {}'.format(infomation), fontdict={'fontsize': 35})
+    plt.text(0, 0, '停机位坐标及编号：\n暂无，待更新', fontdict={'fontsize': 35}, horizontalalignment='left',
+             linespacing=1.7)
 
-    path = '../pythonProject/airport_data/{}/机坪PCN值.png'.format(airport_name)
+    path = '../pythonProject/airport_data/{}/停机位坐标及编号.png'.format(airport_name)
     plt.savefig(path, format='png')
     plt.close()
 

@@ -162,7 +162,12 @@ def plot_data(info):
         # 防止出现显示不全的情况
         plt.gcf().subplots_adjust(top=top_dis)
 
-        plt.title(str(int(info['跑道号1'])), rotation=rotation_rate + 90 + 180)
+        if int(info['跑道号1']) < 10:
+            codes = '0' + str(int(info['跑道号1']))
+        elif int(info['跑道号1']) > 10:
+            codes = str(int(info['跑道号1']))
+
+        plt.title(codes, rotation=rotation_rate + 90 + 180)
     except ValueError:
         pass
 
@@ -178,7 +183,12 @@ def plot_data(info):
         # 防止出现显示不全的情况
         plt.gcf().subplots_adjust(top=top_dis)
 
-        plt.title(str(int(info['跑道号2'])), rotation=rotation_rate + 90)
+        if int(info['跑道号2']) < 10:
+            codes = '0' + str(int(info['跑道号2']))
+        elif int(info['跑道号2']) > 10:
+            codes = str(int(info['跑道号2']))
+
+        plt.title(codes, rotation=rotation_rate + 90)
     except ValueError:
         pass
 
@@ -248,33 +258,43 @@ def plot_data(info):
     # ------------------------------------磁偏角-------------------------------
     try:
         pi = int(info['磁偏角'])
+        if pi < 3:
+            pi = 3
         t.reset()
         t.hideturtle()
         t.tracer(False)  # 不显示画图过程
 
+        arr = 170  # 箭头角度
         t.left(90)
-        t.forward(90)
+        t.forward(120)  # 第一个箭头长度
         t.begin_fill()
-        t.left(165)
+        t.left(arr)
         t.forward(20)
-        t.left(270 - 165)
-        t.forward(11)
-        t.left(270 - 165)
+        t.left(270 - arr)
+        t.forward(7)
+        t.left(270 - arr)
         t.forward(20)
         t.end_fill()
 
         t.penup()
-        t.setheading(90)
+        t.forward(5)
+        t.left(90)
+        t.forward(2)
+        t.pendown()
+        t.write('N', font=('NEW TIMES ROME', 15, 'normal'))
+
+        t.penup()
+        t.seth(90)
         t.goto(0, 0)
         t.pendown()
         t.left(pi)
-        t.forward(70)
+        t.forward(100)  # 第二个箭头长度
         t.begin_fill()
-        t.left(165)
+        t.left(arr)
         t.forward(20)
-        t.left(270 - 165)
-        t.forward(11)
-        t.left(270 - 165)
+        t.left(270 - arr)
+        t.forward(7)
+        t.left(270 - arr)
         t.forward(20)
         t.end_fill()
 
