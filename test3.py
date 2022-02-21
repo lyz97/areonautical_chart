@@ -72,18 +72,18 @@ def plot_data(info):
                 dpi=1000)
     plt.close()
     # ---------------------------跑道长度-----------------------------
-    fig, ax = plt.subplots()
-    fig.patch.set_alpha(0.)
-    ax.axis('off')
-
-    # 防止出现显示不全的情况
-    plt.gcf().subplots_adjust(top=top_dis)
-
-    plt.title(str(info['跑道长度']), rotation=rotation_rate)
-
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道长度'), format='eps', dpi=1000)
-
-    plt.close()
+    # fig, ax = plt.subplots()
+    # fig.patch.set_alpha(0.)
+    # ax.axis('off')
+    #
+    # # 防止出现显示不全的情况
+    # plt.gcf().subplots_adjust(top=top_dis)
+    #
+    # plt.title(str(info['跑道长度']), rotation=rotation_rate)
+    #
+    # plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道长度'), format='eps', dpi=1000)
+    #
+    # plt.close()
 
     # ---------------------------升降带-----------------------------
     fig, ax = plt.subplots(figsize=(5, 5))
@@ -95,7 +95,7 @@ def plot_data(info):
     # 防止出现显示不全的情况
     plt.gcf().subplots_adjust(top=top_dis)
 
-    plt.title(strip, rotation=rotation_rate)
+    plt.title(strip, rotation=rotation_rate, fontsize='xx-large', fontweight='heavy')
 
     plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '升降带'), format='eps', dpi=1000)
 
@@ -112,7 +112,7 @@ def plot_data(info):
         # 防止出现显示不全的情况
         plt.gcf().subplots_adjust(top=top_dis)
 
-        plt.title(elev, rotation=rotation_rate)
+        plt.title(elev, rotation=rotation_rate, fontweight='heavy')
     except ValueError:
         pass
 
@@ -167,7 +167,7 @@ def plot_data(info):
         elif int(info['跑道号1']) > 10:
             codes = str(int(info['跑道号1']))
 
-        plt.title(codes, rotation=rotation_rate + 90 + 180)
+        plt.title(codes, rotation=rotation_rate + 90 + 180, fontsize='xx-large', fontweight='heavy')
     except ValueError:
         pass
 
@@ -188,7 +188,7 @@ def plot_data(info):
         elif int(info['跑道号2']) > 10:
             codes = str(int(info['跑道号2']))
 
-        plt.title(codes, rotation=rotation_rate + 90)
+        plt.title(codes, rotation=rotation_rate + 90, fontsize='xx-large', fontweight='heavy')
     except ValueError:
         pass
 
@@ -197,21 +197,21 @@ def plot_data(info):
     plt.close()
 
     # ---------------------------四字码-----------------------------
-    fig, ax = plt.subplots()
-    fig.patch.set_alpha(0.)
-    ax.axis('off')
-
-    try:
-        # 防止出现显示不全的情况
-        plt.gcf().subplots_adjust(top=top_dis)
-
-        plt.title(str(info['四字码']))
-    except ValueError:
-        pass
-
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '四字码'), format='eps', dpi=1000)
-
-    plt.close()
+    # fig, ax = plt.subplots()
+    # fig.patch.set_alpha(0.)
+    # ax.axis('off')
+    #
+    # try:
+    #     # 防止出现显示不全的情况
+    #     plt.gcf().subplots_adjust(top=top_dis)
+    #
+    #     plt.title(str(info['四字码']))
+    # except ValueError:
+    #     pass
+    #
+    # plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '四字码'), format='eps', dpi=1000)
+    #
+    # plt.close()
 
 
     # ---------------------------说明-----------------------------

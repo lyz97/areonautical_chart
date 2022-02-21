@@ -8,7 +8,7 @@ def plot_PCN(airport_name, infomation):
     ax.axis('off')
     # 中文
 
-    plt.rcParams['font.sans-serif'] = ['SimHei', 'Times New Roman']
+    plt.rcParams['font.sans-serif'] = ['SimHei']
     plt.rcParams['axes.unicode_minus'] = False
 
     plt.text(0, 0, '标高和跑道长度为米，方位为磁方位\nRWY: PCN {}'.format(infomation),
