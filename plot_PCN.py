@@ -27,7 +27,8 @@ def plot_PCN(airport_name, infomation):
     plt.rcParams['font.sans-serif'] = ['SimHei']
     plt.rcParams['axes.unicode_minus'] = False
 
-    plt.text(0, 0, '停机位坐标及编号：\n暂无，待更新', fontdict={'fontsize': 35}, horizontalalignment='left',
+    text = '暂无，待更新'
+    plt.text(0, 0, '停机位坐标及编号：\n{}'.format(text), fontdict={'fontsize': 35}, horizontalalignment='left',
              linespacing=1.7)
 
     path = '../pythonProject/airport_data/{}/停机位坐标及编号.png'.format(airport_name)
