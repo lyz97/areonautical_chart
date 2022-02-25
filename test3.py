@@ -68,7 +68,7 @@ def plot_data(info):
 
     plt.title(str(surface_scale), rotation=rotation_rate)
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道尺寸和表面类型'), format='eps',
+    plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '跑道尺寸和表面类型'), format='eps',
                 dpi=1000)
     plt.close()
     # ---------------------------跑道长度-----------------------------
@@ -97,7 +97,7 @@ def plot_data(info):
 
     plt.title(strip, rotation=rotation_rate, fontsize='xx-large', fontweight='heavy')
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '升降带'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '升降带'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -116,7 +116,7 @@ def plot_data(info):
     except ValueError:
         pass
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '机场标高'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '机场标高'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -133,7 +133,7 @@ def plot_data(info):
     except ValueError:
         pass
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '真方位1'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '真方位1'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -149,7 +149,7 @@ def plot_data(info):
     except ValueError:
         pass
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '真方位2'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '真方位2'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -171,7 +171,7 @@ def plot_data(info):
     except ValueError:
         pass
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道号1'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '跑道号1'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -192,7 +192,7 @@ def plot_data(info):
     except ValueError:
         pass
 
-    plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '跑道号2'), format='eps', dpi=1000)
+    plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '跑道号2'), format='eps', dpi=1000)
 
     plt.close()
 
@@ -299,7 +299,7 @@ def plot_data(info):
 
         t.hideturtle()
         ts = t.getscreen()
-        save_path = '../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '磁偏角')
+        save_path = '../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '磁偏角')
         ts.getcanvas().postscript(file=save_path)
 
         fig, ax = plt.subplots()
@@ -314,7 +314,7 @@ def plot_data(info):
         except ValueError:
             pass
 
-        plt.savefig('../pythonProject/airport_data/{}/{}.eps'.format(info['机场名'], '磁偏角数据'), format='eps', dpi=1000)
+        plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '磁偏角数据'), format='eps', dpi=1000)
 
         plt.close()
 
@@ -502,7 +502,8 @@ def plot_scale(ture_distance_per_pix, save_path):
 
 
 if __name__ == '__main__':
-    filename = 'D:/ZY数据1.csv'
+    FIR_name = 'ZB'
+    filename = 'D:/FIR/{}.csv'.format(FIR_name)
     data = process_data(get_data(filename))
     # pic = '../pythonProject/[3.1]阿荣通用机场.jpg'
     if os.path.isdir('../pythonProject/airport_data'):
@@ -518,26 +519,31 @@ if __name__ == '__main__':
     # for index, row in data.iterrows():
     #     print(index)
     for row_index, row in data.iterrows():
-        if os.path.isdir('../pythonProject/airport_data/{}'.format(row['机场名'])):
+        if os.path.isdir('../pythonProject/airport_data/{}'.format(FIR_name)):
             pass
         else:
-            os.mkdir('../pythonProject/airport_data/{}'.format(row['机场名']))
+            os.mkdir('../pythonProject/airport_data/{}'.format(FIR_name))
 
-        plot_PCN.plot_PCN(row['机场名'], row['机坪PCN值'])
+        if os.path.isdir('../pythonProject/airport_data/{}/{}'.format(FIR_name, row['机场名'])):
+            pass
+        else:
+            os.mkdir('../pythonProject/airport_data/{}/{}'.format(FIR_name, row['机场名']))
+
+        plot_PCN.plot_PCN(row['机场名'], row['机坪PCN值'], FIR_name)
 
     plt.rc('font', family='Times New Roman')
     for row_index, row in data.iterrows():
         plot_data(row)
         # for key, item in row.items():
         #     print(key)
-        runway_path = '../pythonProject/airport_data/{}/跑道.eps'.format(row['机场名'])
+        runway_path = '../pythonProject/airport_data/{}/{}/跑道.eps'.format(FIR_name, row['机场名'])
         runway_scale = row['跑道尺寸']
         rotate = row['真方位1']
 
         times = evaluate_size(row['跑道长度'], row['真方位1'])
         strip_scale = row['升降带']
         plot_runway(row['机场名'], runway_scale, times, rotate, strip_scale, runway_path)
-        scaling_bar_save_path = '../pythonProject/airport_data/{}/比例尺.eps'.format(row['机场名'])
+        scaling_bar_save_path = '../pythonProject/airport_data/{}/{}/比例尺.eps'.format(FIR_name, row['机场名'])
         plot_scale(times, scaling_bar_save_path)
 
     # plot_data(pic)

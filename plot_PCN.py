@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import turtle as t
 
 
-def plot_PCN(airport_name, infomation):
+def plot_PCN(airport_name, infomation, FIR):
     fig, ax = plt.subplots(figsize=(10, 10))
     fig.patch.set_alpha(0.)
     ax.axis('off')
@@ -14,7 +14,7 @@ def plot_PCN(airport_name, infomation):
     plt.text(0, 0, '标高和跑道长度为米，方位为磁方位\nRWY: PCN {}'.format(infomation),
              fontdict={'fontsize': 35}, linespacing=1.7)
 
-    path = '../pythonProject/airport_data/{}/机坪PCN值.png'.format(airport_name)
+    path = '../pythonProject/airport_data/{}/{}/机坪PCN值.png'.format(FIR, airport_name)
     plt.savefig(path, format='png')
     plt.close()
 
@@ -31,7 +31,7 @@ def plot_PCN(airport_name, infomation):
     plt.text(0, 0, '停机位坐标及编号：\n{}'.format(text), fontdict={'fontsize': 35}, horizontalalignment='left',
              linespacing=1.7)
 
-    path = '../pythonProject/airport_data/{}/停机位坐标及编号.png'.format(airport_name)
+    path = '../pythonProject/airport_data/{}/{}/停机位坐标及编号.png'.format(FIR, airport_name)
     plt.savefig(path, format='png')
     plt.close()
 
