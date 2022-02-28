@@ -48,6 +48,9 @@ def plot_data(info):
     :return:
     """
 
+    if info['真方位1'] is None:
+        return
+
     if info['真方位1'] < 180:
         rotation_rate = 360 - info['真方位1'] + 90
     elif info['真方位1'] > 180:
@@ -66,7 +69,10 @@ def plot_data(info):
     # 防止出现显示不全的情况
     plt.gcf().subplots_adjust(top=top_dis)
 
-    plt.title(str(surface_scale), rotation=rotation_rate)
+    try:
+        plt.title(str(surface_scale), rotation=rotation_rate)
+    except UnboundLocalError:
+        return
 
     plt.savefig('../pythonProject/airport_data/{}/{}/{}.eps'.format(FIR_name, info['机场名'], '跑道尺寸和表面类型'), format='eps',
                 dpi=1000)
@@ -164,10 +170,12 @@ def plot_data(info):
 
         if int(info['跑道号1']) < 10:
             codes = '0' + str(int(info['跑道号1']))
-        elif int(info['跑道号1']) > 10:
+        elif int(info['跑道号1']) >= 10:
             codes = str(int(info['跑道号1']))
-
-        plt.title(codes, rotation=rotation_rate + 90 + 180, fontsize='xx-large', fontweight='heavy')
+        try:
+            plt.title(codes, rotation=rotation_rate + 90 + 180, fontsize='xx-large', fontweight='heavy')
+        except UnboundLocalError:
+            pass
     except ValueError:
         pass
 
@@ -450,7 +458,6 @@ def evaluate_size(runway_length, alpha):
 
     a = math.fabs(runway_length * math.sin(math.radians(alpha)))
     b = math.fabs(runway_length * math.cos(math.radians(alpha)))
-
     times = 1
     while (a > 500) or (b > 500):
         a = a / 1.1
@@ -502,7 +509,7 @@ def plot_scale(ture_distance_per_pix, save_path):
 
 
 if __name__ == '__main__':
-    FIR_name = 'ZB'
+    FIR_name = 'ZL'
     filename = 'D:/FIR/{}.csv'.format(FIR_name)
     data = process_data(get_data(filename))
     # pic = '../pythonProject/[3.1]阿荣通用机场.jpg'
