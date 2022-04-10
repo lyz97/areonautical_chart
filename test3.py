@@ -473,34 +473,42 @@ def evaluate_size(runway_length, alpha):
 
 
 def plot_scale(ture_distance_per_pix, save_path):
+    scale_zoom = 1  # 以我现在的电脑为基准1，调整这个参数，整体缩放比例尺
+
     ture_distance_per_centimetre = int(43 * (1.1 ** ture_distance_per_pix))
-    number_of_grid = 4
+    number_of_grid = 4  # 画几个一厘米的标度
 
     t.reset()
     t.hideturtle()
     t.tracer(False)  # 不显示画图过程
 
+    # 比例尺刻度的长度是a_length
+    # 比例尺的一厘米对应turtle中的像素值是是b_length
+
+    a_length = 5 * scale_zoom
+    b_length = 43 * scale_zoom
+
     t.left(90)
-    t.forward(5)
-    t.write('0', font=('宋体', 12, 'normal'))
+    t.forward(a_length)
+    t.write('0', font=('宋体', int(12*scale_zoom), 'normal'))
     t.left(180)
-    t.forward(5)
+    t.forward(a_length)
     t.left(90)
     num = 1
     for i in range(number_of_grid):
-        t.forward(43)
+        t.forward(b_length)
         t.left(90)
-        t.forward(5)
+        t.forward(a_length)
         t.left(90)
         t.penup()
-        t.forward(10)
-        t.write('{}m'.format(ture_distance_per_centimetre * num), font=('NEW TIMES ROME', 12, 'normal'))
+        t.forward(10)  # 这个10是指比例尺标注的数字，和比例尺之间的距离
+        t.write('{}m'.format(ture_distance_per_centimetre * num), font=('NEW TIMES ROME', int(12*scale_zoom), 'normal'))
         num += 1
         t.left(180)
-        t.forward(10)
+        t.forward(10)  # 这个10是指比例尺标注的数字，和比例尺之间的距离
         t.right(90)
         t.pendown()
-        t.forward(5)
+        t.forward(a_length)
         t.left(90)
 
     t.hideturtle()
@@ -509,7 +517,7 @@ def plot_scale(ture_distance_per_pix, save_path):
 
 
 if __name__ == '__main__':
-    FIR_name = 'ZL'
+    FIR_name = 'ZS1'
     filename = 'D:/FIR/{}.csv'.format(FIR_name)
     data = process_data(get_data(filename))
     # pic = '../pythonProject/[3.1]阿荣通用机场.jpg'
